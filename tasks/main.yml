@@ -1,0 +1,47 @@
+---
+# tasks file for webapp-role
+- name: create docker network
+  docker_network:
+    name: deploy
+    state: present
+  
+- name: log into docker hub registry
+  docker_login:
+    username: "vtenisheva"
+    password: "{{ dockerhub_password }}"
+
+- name: run 1st container 
+  docker_container:
+    name: webapp-nginx-5001
+    hostname: webapp-nginx-5001
+    state: started
+    image: "vtenisheva/my_private:web_app"
+    pull: true
+    ports:
+      - "5001:5000"
+    networks:
+      - name: deploy
+
+- name: run 2nd container
+  docker_container:
+    name: webapp-nginx-5002
+    hostname: webapp-nginx-5002
+    state: started
+    image: "vtenisheva/my_private:web_app"
+    pull: true
+    ports:
+      - "5002:5000"
+    networks:
+      - name: deploy
+
+- name: run 3rd container
+  docker_container:
+    name: webapp-nginx-5003
+    hostname: webapp-nginx-5003
+    state: started
+    image: "vtenisheva/my_private:web_app"
+    pull: true
+    ports:
+      - "5003:5000"
+    networks:
+      - name: deploy
